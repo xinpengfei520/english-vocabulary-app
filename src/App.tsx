@@ -1,26 +1,79 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import MainLayout from './components/MainLayout';
+import AuthPage from './pages/AuthPage';
+import DashboardPage from './pages/DashboardPage';
+import LearnPage from './pages/LearnPage';
+import MemoryPage from './pages/MemoryPage';
+import StudyPlanPage from './pages/StudyPlanPage';
+import TestPage from './pages/TestPage';
+import GamePage from './pages/GamePage';
+import SocialPage from './pages/SocialPage';
+import { useAuth } from './hooks/useAuth';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <div>加载中...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigProvider locale={zhCN}>
+      <Router>
+        <Routes>
+          <Route 
+            path="/auth" 
+            element={user ? <Navigate to="/" replace /> : <AuthPage />} 
+          />
+          <Route 
+            path="/" 
+            element={user ? <MainLayout><DashboardPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/learn" 
+            element={user ? <MainLayout><LearnPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/memory" 
+            element={user ? <MainLayout><MemoryPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/plan" 
+            element={user ? <MainLayout><StudyPlanPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/test" 
+            element={user ? <MainLayout><TestPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/game" 
+            element={user ? <MainLayout><GamePage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="/social" 
+            element={user ? <MainLayout><SocialPage /></MainLayout> : <Navigate to="/auth" replace />} 
+          />
+          <Route 
+            path="*" 
+            element={<Navigate to="/" replace />} 
+          />
+        </Routes>
+      </Router>
+    </ConfigProvider>
   );
-}
+};
 
 export default App;
