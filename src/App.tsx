@@ -17,6 +17,8 @@ import './App.css';
 const App: React.FC = () => {
   const { user, loading } = useAuth();
 
+  console.log('App render - user:', user, 'loading:', loading);
+
   if (loading) {
     return (
       <div style={{ 

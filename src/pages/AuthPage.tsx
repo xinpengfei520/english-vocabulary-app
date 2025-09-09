@@ -13,8 +13,12 @@ const AuthPage: React.FC = () => {
     setLoading(true);
     try {
       const result = await login(values.email, values.password);
+      console.log('AuthPage login result:', result);
       message.success('登录成功！');
-      navigate('/');
+      setTimeout(() => {
+        console.log('About to navigate to dashboard');
+        navigate('/');
+      }, 100);
     } catch (error) {
       message.error('登录失败，请检查邮箱和密码');
     } finally {

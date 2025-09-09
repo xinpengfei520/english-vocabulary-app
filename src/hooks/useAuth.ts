@@ -34,6 +34,7 @@ export const useAuth = () => {
       const response = await userService.login({ email, password }) as any;
       localStorage.setItem('token', response.token);
       setUser(response.user);
+      console.log('Login successful, user set:', response.user);
       return response.user;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
