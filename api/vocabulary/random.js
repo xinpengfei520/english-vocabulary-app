@@ -1,37 +1,7 @@
-const vocabularyList = [
-  {
-    id: '1',
-    word: 'knowledge',
-    pronunciation: '/ˈnɒlɪdʒ/',
-    definition: 'facts, information, and skills acquired through experience or education',
-    translation: '知识',
-    difficulty: 'easy',
-    category: 'education',
-    examples: [
-      {
-        sentence: 'Knowledge is power.',
-        translation: '知识就是力量。',
-        context: 'proverb'
-      }
-    ],
-  },
-  {
-    id: '2',
-    word: 'perseverance',
-    pronunciation: '/ˌpɜːsɪˈvɪərəns/',
-    definition: 'continued effort to do or achieve something despite difficulties',
-    translation: '毅力',
-    difficulty: 'hard',
-    category: 'character',
-    examples: [
-      {
-        sentence: 'Success requires perseverance and hard work.',
-        translation: '成功需要毅力和努力工作。',
-        context: 'success factors'
-      }
-    ],
-  },
-];
+const vocabularyList = require('../vocabulary-data.js');
+
+// Mock learning progress data
+let learningProgress = [];
 
 module.exports = async (req, res) => {
   // Enable CORS
@@ -48,10 +18,27 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { count = 10 } = req.query;
-    const randomWords = vocabularyList.sort(() => 0.5 - Math.random()).slice(0, parseInt(count));
+    const { count = 10, exclude = '' } = req.query;
+    
+    // Get list of vocabulary IDs to exclude
+    const excludeIds = exclude ? exclude.split(',') : [];
+    
+    // Filter out already studied words
+    const availableWords = vocabularyList.filter(word => !excludeIds.includes(word.id));
+    
+    // If we don't have enough available words, use all words
+    const wordsToUse = availableWords.length >= parseInt(count) ? availableWords : vocabularyList;
+    
+    // Get random words
+    const randomWords = wordsToUse
+      .sort(() => 0.5 - Math.random())
+      .slice(0, parseInt(count));
+    
+    console.log(`Returning ${randomWords.length} random words, excluded ${excludeIds.length} words`);
+    
     return res.status(200).json(randomWords);
   } catch (error) {
+    console.error('Random words error:', error);
     return res.status(500).json({ message: 'Server error' });
   }
 };

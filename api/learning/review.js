@@ -1,40 +1,6 @@
 // Mock learning progress data
 let learningProgress = [];
-
-const vocabularyList = [
-  {
-    id: '1',
-    word: 'knowledge',
-    pronunciation: '/ˈnɒlɪdʒ/',
-    definition: 'facts, information, and skills acquired through experience or education',
-    translation: '知识',
-    difficulty: 'easy',
-    category: 'education',
-    examples: [
-      {
-        sentence: 'Knowledge is power.',
-        translation: '知识就是力量。',
-        context: 'proverb'
-      }
-    ],
-  },
-  {
-    id: '2',
-    word: 'perseverance',
-    pronunciation: '/ˌpɜːsɪˈvɪərəns/',
-    definition: 'continued effort to do or achieve something despite difficulties',
-    translation: '毅力',
-    difficulty: 'hard',
-    category: 'character',
-    examples: [
-      {
-        sentence: 'Success requires perseverance and hard work.',
-        translation: '成功需要毅力和努力工作。',
-        context: 'success factors'
-      }
-    ],
-  },
-];
+const vocabularyList = require('../vocabulary-data.js');
 
 module.exports = async (req, res) => {
   // Enable CORS
