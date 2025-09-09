@@ -9,12 +9,38 @@ export const useAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log('useAuth useEffect - token exists:', !!token);
     if (token) {
       getCurrentUser();
     } else {
       setLoading(false);
     }
   }, []);
+
+  // 添加一个effect来监听localStorage的变化
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('token');
+      console.log('Storage change detected, token:', !!token);
+      if (token) {
+        getCurrentUser();
+      } else {
+        setUser(null);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // 同时检查当前token
+    const token = localStorage.getItem('token');
+    if (token && !user) {
+      getCurrentUser();
+    }
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [user]);
 
   const getCurrentUser = async () => {
     try {
@@ -33,8 +59,14 @@ export const useAuth = () => {
       setError(null);
       const response = await userService.login({ email, password }) as any;
       localStorage.setItem('token', response.token);
-      setUser(response.user);
       console.log('Login successful, user set:', response.user);
+      
+      // 强制设置用户状态
+      setUser(response.user);
+      
+      // 触发自定义事件来通知其他组件
+      window.dispatchEvent(new Event('authChange'));
+      
       return response.user;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');

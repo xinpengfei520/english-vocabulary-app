@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
@@ -16,8 +16,22 @@ import './App.css';
 
 const App: React.FC = () => {
   const { user, loading } = useAuth();
+  const [forceUpdate, setForceUpdate] = useState(0);
 
-  console.log('App render - user:', user, 'loading:', loading);
+  // 监听认证状态变化
+  useEffect(() => {
+    const handleAuthChange = () => {
+      console.log('Auth change event received, forcing update');
+      setForceUpdate(prev => prev + 1);
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+  }, []);
+
+  console.log('App render - user:', user, 'loading:', loading, 'forceUpdate:', forceUpdate);
 
   if (loading) {
     return (

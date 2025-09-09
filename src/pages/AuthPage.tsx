@@ -15,10 +15,10 @@ const AuthPage: React.FC = () => {
       const result = await login(values.email, values.password);
       console.log('AuthPage login result:', result);
       message.success('登录成功！');
-      setTimeout(() => {
-        console.log('About to navigate to dashboard');
-        navigate('/');
-      }, 100);
+      
+      // 直接导航，不等待
+      console.log('Navigating to dashboard...');
+      navigate('/');
     } catch (error) {
       message.error('登录失败，请检查邮箱和密码');
     } finally {
