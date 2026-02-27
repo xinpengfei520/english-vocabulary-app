@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken');
 const users = [
   {
     id: '1',
-    username: 'demo',
-    email: 'demo@example.com',
-    password: '$2b$08$KmTO.t/GrqRxVxDO/s8.LuZOUNWtkmdWo9VbPvVUdt4eeXAJm.PAC',
+    username: 'vancexin',
+    email: 'xinpengfei520@gmail.com',
+    password: '$2b$08$aA5lE6pO.Xpzc552kuRpSOlqt5DaQI8w6rg05NPEGTZSMl5JG/t/2',
     level: 1,
     experience: 0,
     avatar: '',
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  
+
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
 
   try {
     const { email, password } = req.body;
-    
+
     const user = users.find(u => u.email === email);
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(401).json({ message: 'Invalid credentials' });
