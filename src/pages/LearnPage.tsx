@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Progress, Tag, Rate, Modal, Input, Spin, message, Row, Col } from 'antd';
-import { SoundOutlined, HeartOutlined, BookOutlined, TrophyOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { Card, Button, Progress, Tag, Input, Spin, message, Row, Col } from 'antd';
+import { SoundOutlined, HeartOutlined, BookOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { vocabularyService, learningService } from '../services/api';
 import { Vocabulary } from '../types';
@@ -50,10 +50,10 @@ const LearnPage: React.FC = () => {
 
   const checkAnswer = () => {
     if (!currentWord || !userAnswer) return;
-    
+
     const correct = userAnswer.toLowerCase().trim() === currentWord.word.toLowerCase();
     setIsCorrect(correct);
-    
+
     if (correct) {
       setStats(prev => ({
         ...prev,
@@ -70,7 +70,7 @@ const LearnPage: React.FC = () => {
       }));
       message.error(`不正确，正确答案是：${currentWord.word}`);
     }
-    
+
     setTimeout(() => {
       loadNextWord();
     }, 1500);
@@ -78,7 +78,7 @@ const LearnPage: React.FC = () => {
 
   const markAsKnown = async () => {
     if (!currentWord) return;
-    
+
     try {
       await learningService.markWordStudied(currentWord.id, true);
       message.success('标记为已掌握');
@@ -90,7 +90,7 @@ const LearnPage: React.FC = () => {
 
   const markAsUnknown = async () => {
     if (!currentWord) return;
-    
+
     try {
       await learningService.markWordStudied(currentWord.id, false);
       message.info('需要更多练习');
@@ -127,8 +127,8 @@ const LearnPage: React.FC = () => {
             <Row gutter={16} align="middle">
               <Col span={6}>
                 <div style={{ textAlign: 'center' }}>
-                  <Progress 
-                    type="circle" 
+                  <Progress
+                    type="circle"
                     percent={Math.round((stats.correct / stats.total) * 100) || 0}
                     format={() => `${stats.correct}/${stats.total}`}
                     size={80}
@@ -146,7 +146,7 @@ const LearnPage: React.FC = () => {
               </Col>
               <Col span={6}>
                 <div style={{ textAlign: 'center' }}>
-                  <Button 
+                  <Button
                     type={testMode ? 'primary' : 'default'}
                     onClick={() => setTestMode(!testMode)}
                   >
@@ -186,8 +186,8 @@ const LearnPage: React.FC = () => {
                     onPressEnter={checkAnswer}
                     style={{ marginBottom: 16 }}
                   />
-                  <Button 
-                    type="primary" 
+                  <Button
+                    type="primary"
                     size="large"
                     onClick={checkAnswer}
                     disabled={!userAnswer}
@@ -206,7 +206,7 @@ const LearnPage: React.FC = () => {
                 </div>
               ) : (
                 <div style={{ textAlign: 'center' }}>
-                  <motion.h1 
+                  <motion.h1
                     style={{ fontSize: '48px', margin: '24px 0' }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -214,9 +214,9 @@ const LearnPage: React.FC = () => {
                   >
                     {currentWord.word}
                   </motion.h1>
-                  
+
                   <div style={{ margin: '16px 0' }}>
-                    <Button 
+                    <Button
                       icon={<SoundOutlined />}
                       onClick={playPronunciation}
                       size="large"
@@ -228,19 +228,19 @@ const LearnPage: React.FC = () => {
                       {currentWord.difficulty}
                     </Tag>
                   </div>
-                  
+
                   <div style={{ fontSize: '18px', color: '#666', margin: '16px 0' }}>
                     {currentWord.pronunciation}
                   </div>
-                  
+
                   <div style={{ fontSize: '24px', margin: '24px 0', color: '#1890ff' }}>
                     {currentWord.translation}
                   </div>
-                  
+
                   <div style={{ fontSize: '16px', color: '#666', margin: '16px 0' }}>
                     {currentWord.definition}
                   </div>
-                  
+
                   {showExample && currentWord.examples && currentWord.examples.length > 0 && (
                     <div style={{ textAlign: 'left', margin: '24px 0', padding: '16px', background: '#f8f9fa', borderRadius: '8px' }}>
                       <h4>例句：</h4>
@@ -252,23 +252,23 @@ const LearnPage: React.FC = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   <div style={{ marginTop: 24 }}>
-                    <Button 
+                    <Button
                       onClick={() => setShowExample(!showExample)}
                       style={{ marginRight: 8 }}
                     >
                       {showExample ? '隐藏例句' : '显示例句'}
                     </Button>
-                    <Button 
-                      type="primary" 
+                    <Button
+                      type="primary"
                       icon={<HeartOutlined />}
                       onClick={markAsKnown}
                       style={{ marginRight: 8 }}
                     >
                       认识
                     </Button>
-                    <Button 
+                    <Button
                       icon={<BookOutlined />}
                       onClick={markAsUnknown}
                     >
@@ -280,7 +280,7 @@ const LearnPage: React.FC = () => {
             </Card>
           </motion.div>
         </Col>
-        
+
         <Col xs={24} lg={8}>
           <Card title="学习提示" size="small">
             <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
@@ -291,7 +291,7 @@ const LearnPage: React.FC = () => {
                 <li>查看例句加深理解</li>
                 <li>使用测试模式检验记忆</li>
               </ul>
-              
+
               <p style={{ marginTop: '16px' }}><strong>记忆方法：</strong></p>
               <ul>
                 <li>联想记忆法</li>
@@ -301,7 +301,7 @@ const LearnPage: React.FC = () => {
               </ul>
             </div>
           </Card>
-          
+
           <Card title="今日进度" size="small" style={{ marginTop: 16 }}>
             <Progress percent={65} status="active" />
             <div style={{ marginTop: 8, fontSize: '14px', color: '#666' }}>

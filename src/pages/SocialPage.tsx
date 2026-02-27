@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Input, List, Avatar, Badge, Tabs, Modal, Form, message, Tag, Row, Col } from 'antd';
-import { UserOutlined, TeamOutlined, TrophyOutlined, MessageOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, TrophyOutlined, PlusOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { achievementService } from '../services/api';
 import { Achievement, User } from '../types';
@@ -37,7 +37,7 @@ const SocialPage: React.FC = () => {
         achievementService.getAchievements(),
       ]);
       setAchievements(achievementsData);
-      
+
       // Mock data for demo
       setStudyGroups([
         {
@@ -121,7 +121,7 @@ const SocialPage: React.FC = () => {
 
   const handleJoinGroup = async (groupId: string) => {
     try {
-      setStudyGroups(studyGroups.map(group => 
+      setStudyGroups(studyGroups.map(group =>
         group.id === groupId ? { ...group, isJoined: true, memberCount: group.memberCount + 1 } : group
       ));
       message.success('加入学习小组成功！');
@@ -132,7 +132,7 @@ const SocialPage: React.FC = () => {
 
   const handleLeaveGroup = async (groupId: string) => {
     try {
-      setStudyGroups(studyGroups.map(group => 
+      setStudyGroups(studyGroups.map(group =>
         group.id === groupId ? { ...group, isJoined: false, memberCount: group.memberCount - 1 } : group
       ));
       message.success('离开学习小组成功！');
@@ -158,30 +158,30 @@ const SocialPage: React.FC = () => {
             <Tabs defaultActiveKey="groups">
               <TabPane tab="学习小组" key="groups">
                 <div style={{ marginBottom: 16 }}>
-                  <Button 
-                    type="primary" 
+                  <Button
+                    type="primary"
                     icon={<PlusOutlined />}
                     onClick={() => setCreateGroupModalVisible(true)}
                   >
                     创建学习小组
                   </Button>
                 </div>
-                
+
                 <List
                   dataSource={studyGroups}
                   renderItem={(group) => (
                     <List.Item
                       actions={[
                         group.isJoined ? (
-                          <Button 
-                            danger 
+                          <Button
+                            danger
                             onClick={() => handleLeaveGroup(group.id)}
                           >
                             离开
                           </Button>
                         ) : (
-                          <Button 
-                            type="primary" 
+                          <Button
+                            type="primary"
                             onClick={() => handleJoinGroup(group.id)}
                             disabled={group.memberCount >= group.maxMembers}
                           >
@@ -216,7 +216,7 @@ const SocialPage: React.FC = () => {
                   )}
                 />
               </TabPane>
-              
+
               <TabPane tab="好友" key="friends">
                 <List
                   dataSource={friends}
@@ -237,7 +237,7 @@ const SocialPage: React.FC = () => {
                   )}
                 />
               </TabPane>
-              
+
               <TabPane tab="排行榜" key="leaderboard">
                 <List
                   dataSource={leaderboard}
@@ -264,7 +264,7 @@ const SocialPage: React.FC = () => {
                   )}
                 />
               </TabPane>
-              
+
               <TabPane tab="成就" key="achievements">
                 <Row gutter={[16, 16]}>
                   <Col span={24}>
@@ -276,14 +276,14 @@ const SocialPage: React.FC = () => {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <Card 
+                              <Card
                                 style={{ textAlign: 'center' }}
                                 bodyStyle={{ padding: '16px' }}
                               >
-                                <Avatar 
-                                  size={48} 
+                                <Avatar
+                                  size={48}
                                   icon={<TrophyOutlined />}
-                                  style={{ 
+                                  style={{
                                     background: getAchievementColor(item.achievement.rarity),
                                     marginBottom: '8px'
                                   }}
@@ -301,7 +301,7 @@ const SocialPage: React.FC = () => {
                       </Row>
                     </Card>
                   </Col>
-                  
+
                   <Col span={24}>
                     <Card title="所有成就" size="small">
                       <List
@@ -310,7 +310,7 @@ const SocialPage: React.FC = () => {
                           <List.Item>
                             <List.Item.Meta
                               avatar={
-                                <Avatar 
+                                <Avatar
                                   icon={<TrophyOutlined />}
                                   style={{ background: getAchievementColor(achievement.rarity) }}
                                 />
@@ -352,7 +352,7 @@ const SocialPage: React.FC = () => {
           >
             <Input placeholder="请输入小组名称" />
           </Form.Item>
-          
+
           <Form.Item
             name="description"
             label="小组描述"
@@ -360,11 +360,11 @@ const SocialPage: React.FC = () => {
           >
             <Input.TextArea placeholder="请输入小组描述" rows={3} />
           </Form.Item>
-          
+
           <Form.Item name="isPrivate" valuePropName="checked">
             <Input type="checkbox" /> 私密小组
           </Form.Item>
-          
+
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading} block>
               创建小组

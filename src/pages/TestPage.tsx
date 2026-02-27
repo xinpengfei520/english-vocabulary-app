@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Progress, Radio, Input, message, Modal, Result, Statistic, Row, Col, List } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined, TrophyOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { Card, Button, Progress, Radio, Input, message, Result, Statistic, Row, Col, List } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
-import { testService, vocabularyService } from '../services/api';
+import { testService } from '../services/api';
 import { TestQuestion, TestResult } from '../types';
 
 const TestPage: React.FC = () => {
@@ -32,20 +32,20 @@ const TestPage: React.FC = () => {
         questionCount,
         questionTypes: ['multiple-choice', 'fill-blank', 'translation'],
       });
-      
+
       setQuestions(generatedQuestions);
       setCurrentQuestion(0);
       setUserAnswers({});
       setTestStarted(true);
       setTestCompleted(false);
       setTimeSpent(0);
-      
+
       // Start timer
       const interval = setInterval(() => {
         setTimeSpent(prev => prev + 1);
       }, 1000);
       setTimer(interval);
-      
+
       message.success('测试开始！');
     } catch (error) {
       message.error('生成测试失败');
@@ -89,7 +89,7 @@ const TestPage: React.FC = () => {
         const question = questions.find(q => q.id === questionId);
         const isCorrect = question?.correctAnswer.toLowerCase() === userAnswer.toLowerCase();
         if (isCorrect) correctCount++;
-        
+
         return {
           questionId,
           userAnswer,
@@ -99,7 +99,7 @@ const TestPage: React.FC = () => {
       });
 
       const score = Math.round((correctCount / questions.length) * 100);
-      
+
       const result: TestResult = {
         id: Date.now().toString(),
         userId: 'current',
@@ -114,7 +114,7 @@ const TestPage: React.FC = () => {
 
       setTestResult(result);
       setTestCompleted(true);
-      
+
       // Show result message
       if (score >= 80) {
         message.success('太棒了！你的表现非常出色！');
@@ -203,12 +203,12 @@ const TestPage: React.FC = () => {
           <p style={{ color: '#666', marginBottom: 24 }}>
             根据你的水平智能调整题目难度，帮助你有效提升英语能力。
           </p>
-          
+
           <Row gutter={[16, 16]}>
             <Col xs={24} md={8}>
               <Card
                 hoverable
-                style={{ 
+                style={{
                   textAlign: 'center',
                   border: testMode === 'beginner' ? '2px solid #52c41a' : '1px solid #d9d9d9',
                   background: testMode === 'beginner' ? '#f6ffed' : '#fff',
@@ -224,11 +224,11 @@ const TestPage: React.FC = () => {
                 </div>
               </Card>
             </Col>
-            
+
             <Col xs={24} md={8}>
               <Card
                 hoverable
-                style={{ 
+                style={{
                   textAlign: 'center',
                   border: testMode === 'intermediate' ? '2px solid #fa8c16' : '1px solid #d9d9d9',
                   background: testMode === 'intermediate' ? '#fff7e6' : '#fff',
@@ -244,11 +244,11 @@ const TestPage: React.FC = () => {
                 </div>
               </Card>
             </Col>
-            
+
             <Col xs={24} md={8}>
               <Card
                 hoverable
-                style={{ 
+                style={{
                   textAlign: 'center',
                   border: testMode === 'advanced' ? '2px solid #f5222d' : '1px solid #d9d9d9',
                   background: testMode === 'advanced' ? '#fff1f0' : '#fff',
@@ -265,7 +265,7 @@ const TestPage: React.FC = () => {
               </Card>
             </Col>
           </Row>
-          
+
           <div style={{ textAlign: 'center', marginTop: 32 }}>
             <Button
               type="primary"
@@ -297,7 +297,7 @@ const TestPage: React.FC = () => {
             </Button>,
           ]}
         />
-        
+
         <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
           <Col xs={24} md={6}>
             <Card>
@@ -338,7 +338,7 @@ const TestPage: React.FC = () => {
             </Card>
           </Col>
         </Row>
-        
+
         <Card title="答题详情" style={{ marginTop: 16 }}>
           <List
             dataSource={testResult.answers}
@@ -410,10 +410,10 @@ const TestPage: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <Progress percent={progress} strokeColor="#1890ff" />
       </Card>
-      
+
       <Card style={{ marginTop: 16 }}>
         <motion.div
           key={currentQuestion}
@@ -424,7 +424,7 @@ const TestPage: React.FC = () => {
           {renderQuestion(currentQ)}
         </motion.div>
       </Card>
-      
+
       <Card style={{ marginTop: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
@@ -433,11 +433,11 @@ const TestPage: React.FC = () => {
           >
             上一题
           </Button>
-          
+
           <div style={{ color: '#666', fontSize: '14px' }}>
             已答题：{Object.keys(userAnswers).length} / {questions.length}
           </div>
-          
+
           <Button
             type="primary"
             onClick={currentQuestion === questions.length - 1 ? finishTest : nextQuestion}

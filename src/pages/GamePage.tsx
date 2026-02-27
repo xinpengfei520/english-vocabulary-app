@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Progress, Row, Col, Modal, List, Avatar, Badge, message } from 'antd';
+import { Card, Button, Progress, Row, Col, List, Avatar, Badge, message } from 'antd';
 import { TrophyOutlined, CrownOutlined, StarOutlined, PlayCircleOutlined, LockOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
-import { gameService, vocabularyService } from '../services/api';
-import { GameSession, Vocabulary } from '../types';
+import { gameService } from '../services/api';
+import { GameSession } from '../types';
 
 interface GameLevel {
   id: number;
@@ -19,10 +19,10 @@ interface GameLevel {
 }
 
 const GamePage: React.FC = () => {
-  const [currentSession, setCurrentSession] = useState<GameSession | null>(null);
+  const [, setCurrentSession] = useState<GameSession | null>(null);
   const [gameLevels, setGameLevels] = useState<GameLevel[]>([]);
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
-  const [userStats, setUserStats] = useState({
+  const [userStats] = useState({
     level: 1,
     experience: 0,
     coins: 0,
@@ -40,7 +40,7 @@ const GamePage: React.FC = () => {
         gameService.getLeaderboard('weekly'),
       ]);
       setLeaderboard(leaderboardData);
-      
+
       // Mock game levels data
       setGameLevels([
         {
@@ -107,11 +107,7 @@ const GamePage: React.FC = () => {
     }
   };
 
-  const getProgressColor = (percentage: number) => {
-    if (percentage >= 80) return '#52c41a';
-    if (percentage >= 60) return '#fa8c16';
-    return '#f5222d';
-  };
+
 
   const GameModeCard: React.FC<{
     title: string;
@@ -126,7 +122,7 @@ const GamePage: React.FC = () => {
     >
       <Card
         hoverable
-        style={{ 
+        style={{
           textAlign: 'center',
           border: `2px solid ${color}`,
           background: `${color}10`,
@@ -138,8 +134,8 @@ const GamePage: React.FC = () => {
         </div>
         <h3>{title}</h3>
         <p style={{ color: '#666', fontSize: '14px' }}>{description}</p>
-        <Button 
-          type="primary" 
+        <Button
+          type="primary"
           style={{ background: color, borderColor: color, marginTop: '8px' }}
           loading={loading}
         >
@@ -186,8 +182,8 @@ const GamePage: React.FC = () => {
             <TrophyOutlined /> {level.rewards.experience} EXP
           </div>
           {!level.locked && !level.completed && (
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               size="small"
               style={{ marginTop: '8px' }}
               onClick={() => startGameSession('adventure', level.id)}
@@ -217,8 +213,8 @@ const GamePage: React.FC = () => {
               <Col span={6}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '16px', color: '#666' }}>经验值</div>
-                  <Progress 
-                    percent={65} 
+                  <Progress
+                    percent={65}
                     strokeColor="#52c41a"
                     format={() => `${userStats.experience}/1000`}
                   />
@@ -288,7 +284,7 @@ const GamePage: React.FC = () => {
             />
           </Card>
         </Col>
-        
+
         <Col xs={24} lg={8}>
           <Card title="本周排行榜" size="small">
             <List
@@ -312,7 +308,7 @@ const GamePage: React.FC = () => {
               )}
             />
           </Card>
-          
+
           <Card title="成就系统" size="small" style={{ marginTop: 16 }}>
             <Row gutter={8}>
               <Col span={8} style={{ textAlign: 'center' }}>

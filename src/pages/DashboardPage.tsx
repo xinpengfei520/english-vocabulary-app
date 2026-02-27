@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Progress, Statistic, Button, List, Avatar, Badge, Timeline } from 'antd';
+import { Row, Col, Card, Statistic, List, Avatar, Badge, Timeline } from 'antd';
 import { TrophyOutlined, BookOutlined, TeamOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -117,8 +117,8 @@ const DashboardPage: React.FC = () => {
                       title={item.word}
                       description={item.translation}
                     />
-                    <Badge 
-                      count={item.difficulty} 
+                    <Badge
+                      count={item.difficulty}
                       color={item.difficulty === 'easy' ? '#52c41a' : item.difficulty === 'medium' ? '#fa8c16' : '#f5222d'}
                     />
                   </List.Item>
@@ -126,7 +126,7 @@ const DashboardPage: React.FC = () => {
               />
             </Card>
           </Col>
-          
+
           <Col xs={24} lg={12}>
             <Card title="学习进度" loading={loading}>
               <Timeline>
@@ -152,7 +152,7 @@ const DashboardPage: React.FC = () => {
             <Card title="今日推荐">
               <Row gutter={16}>
                 <Col xs={24} md={8}>
-                  <Card 
+                  <Card
                     hoverable
                     style={{ textAlign: 'center' }}
                     onClick={() => window.location.href = '/learn'}
@@ -163,7 +163,7 @@ const DashboardPage: React.FC = () => {
                   </Card>
                 </Col>
                 <Col xs={24} md={8}>
-                  <Card 
+                  <Card
                     hoverable
                     style={{ textAlign: 'center' }}
                     onClick={() => window.location.href = '/game'}
@@ -174,7 +174,7 @@ const DashboardPage: React.FC = () => {
                   </Card>
                 </Col>
                 <Col xs={24} md={8}>
-                  <Card 
+                  <Card
                     hoverable
                     style={{ textAlign: 'center' }}
                     onClick={() => window.location.href = '/test'}

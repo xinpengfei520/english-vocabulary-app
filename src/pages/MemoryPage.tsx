@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Progress, Tag, Calendar, Badge, Modal, List, Avatar, message, Statistic, Row, Col } from 'antd';
-import { CalendarOutlined, ClockCircleOutlined, CheckCircleOutlined, BookOutlined, TrophyOutlined } from '@ant-design/icons';
-import { motion } from 'framer-motion';
-import { learningService, vocabularyService } from '../services/api';
+import { Card, Button, Progress, Tag, Calendar, Badge, List, Avatar, message, Statistic, Row, Col } from 'antd';
+import { ClockCircleOutlined, CheckCircleOutlined, BookOutlined } from '@ant-design/icons';
+import { learningService } from '../services/api';
 import { Vocabulary, LearningProgress } from '../types';
 
 interface ReviewSchedule {
@@ -26,6 +25,7 @@ const MemoryPage: React.FC = () => {
 
   useEffect(() => {
     loadMemoryData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadMemoryData = async () => {
@@ -34,23 +34,23 @@ const MemoryPage: React.FC = () => {
         learningService.getWordsForReview(),
         learningService.getProgress(),
       ]);
-      
+
       setReviewWords(reviewData);
       setLearningProgress(progressData);
-      
+
       // Calculate stats
       const totalWords = progressData.length;
       const masteredWords = progressData.filter(p => p.masteryLevel >= 0.8).length;
       const learningWords = progressData.filter(p => p.masteryLevel > 0 && p.masteryLevel < 0.8).length;
       const reviewWordsCount = reviewData.length;
-      
+
       setStats({
         totalWords,
         masteredWords,
         learningWords,
         reviewWords: reviewWordsCount,
       });
-      
+
       // Generate review schedule for next 30 days
       generateReviewSchedule(progressData);
     } catch (error) {
@@ -63,17 +63,17 @@ const MemoryPage: React.FC = () => {
   const generateReviewSchedule = (progress: LearningProgress[]) => {
     const schedule: ReviewSchedule[] = [];
     const today = new Date();
-    
+
     for (let i = 0; i < 30; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() + i);
       const dateStr = date.toISOString().split('T')[0];
-      
+
       const wordsForDate = progress.filter(p => {
         const reviewDate = new Date(p.nextReview);
         return reviewDate.toISOString().split('T')[0] === dateStr;
       });
-      
+
       if (wordsForDate.length > 0) {
         schedule.push({
           date: dateStr,
@@ -91,20 +91,20 @@ const MemoryPage: React.FC = () => {
         });
       }
     }
-    
+
     setReviewSchedule(schedule);
   };
 
   const markAsReviewed = async (vocabularyId: string, isCorrect: boolean) => {
     try {
       await learningService.markWordStudied(vocabularyId, isCorrect);
-      
+
       if (isCorrect) {
         message.success('复习正确！掌握度提升');
       } else {
         message.info('需要继续复习这个单词');
       }
-      
+
       // Reload data
       loadMemoryData();
     } catch (error) {
@@ -129,7 +129,7 @@ const MemoryPage: React.FC = () => {
   const dateCellRender = (date: any) => {
     const dateStr = date.toISOString().split('T')[0];
     const schedule = reviewSchedule.find(s => s.date === dateStr);
-    
+
     if (schedule) {
       return (
         <div style={{ textAlign: 'center' }}>
@@ -137,7 +137,7 @@ const MemoryPage: React.FC = () => {
         </div>
       );
     }
-    
+
     return null;
   };
 
@@ -216,14 +216,14 @@ const MemoryPage: React.FC = () => {
                   return (
                     <List.Item
                       actions={[
-                        <Button 
-                          type="primary" 
+                        <Button
+                          type="primary"
                           size="small"
                           onClick={() => markAsReviewed(word.id, true)}
                         >
                           认识
                         </Button>,
-                        <Button 
+                        <Button
                           size="small"
                           onClick={() => markAsReviewed(word.id, false)}
                         >
@@ -242,9 +242,9 @@ const MemoryPage: React.FC = () => {
                                 <Tag color={getMasteryColor(progress.masteryLevel)}>
                                   {getMasteryText(progress.masteryLevel)}
                                 </Tag>
-                                <Progress 
-                                  percent={Math.round(progress.masteryLevel * 100)} 
-                                  size="small" 
+                                <Progress
+                                  percent={Math.round(progress.masteryLevel * 100)}
+                                  size="small"
                                   style={{ width: 100, marginLeft: 8 }}
                                 />
                               </div>
@@ -267,11 +267,11 @@ const MemoryPage: React.FC = () => {
             )}
           </Card>
         </Col>
-        
+
         <Col xs={24} lg={12}>
           <Card title="复习日历">
-            <Calendar 
-              fullscreen={false} 
+            <Calendar
+              fullscreen={false}
               dateCellRender={dateCellRender}
               onSelect={onSelectDate}
             />

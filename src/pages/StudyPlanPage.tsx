@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Form, Input, DatePicker, Progress, List, Modal, Tag, Statistic, Row, Col, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, CalendarOutlined, TrophyOutlined, BookOutlined, AimOutlined } from '@ant-design/icons';
-import { motion } from 'framer-motion';
 import { studyPlanService } from '../services/api';
 import { StudyPlan } from '../types';
 import moment from 'moment';
@@ -37,7 +36,7 @@ const StudyPlanPage: React.FC = () => {
         completedWords: 0,
         isActive: true,
       };
-      
+
       if (editingPlan) {
         await studyPlanService.updatePlan(editingPlan.id, planData);
         message.success('学习计划更新成功！');
@@ -45,7 +44,7 @@ const StudyPlanPage: React.FC = () => {
         await studyPlanService.createPlan(planData);
         message.success('学习计划创建成功！');
       }
-      
+
       setCreateModalVisible(false);
       setEditingPlan(null);
       form.resetFields();
@@ -90,7 +89,7 @@ const StudyPlanPage: React.FC = () => {
   const getStatusColor = (plan: StudyPlan) => {
     const progress = getProgressPercentage(plan);
     const daysRemaining = getDaysRemaining(plan.endDate);
-    
+
     if (progress >= 100) return '#52c41a';
     if (daysRemaining < 0) return '#f5222d';
     if (progress >= 80) return '#52c41a';
@@ -101,7 +100,7 @@ const StudyPlanPage: React.FC = () => {
   const getStatusText = (plan: StudyPlan) => {
     const progress = getProgressPercentage(plan);
     const daysRemaining = getDaysRemaining(plan.endDate);
-    
+
     if (progress >= 100) return '已完成';
     if (daysRemaining < 0) return '已过期';
     if (progress >= 80) return '即将完成';
@@ -171,11 +170,11 @@ const StudyPlanPage: React.FC = () => {
         </Col>
       </Row>
 
-      <Card 
-        title="学习计划" 
+      <Card
+        title="学习计划"
         extra={
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             icon={<PlusOutlined />}
             onClick={() => setCreateModalVisible(true)}
           >
@@ -190,18 +189,18 @@ const StudyPlanPage: React.FC = () => {
             renderItem={(plan) => {
               const progress = getProgressPercentage(plan);
               const daysRemaining = getDaysRemaining(plan.endDate);
-              
+
               return (
                 <List.Item
                   actions={[
-                    <Button 
+                    <Button
                       icon={<EditOutlined />}
                       onClick={() => handleEditPlan(plan)}
                     >
                       编辑
                     </Button>,
-                    <Button 
-                      danger 
+                    <Button
+                      danger
                       icon={<DeleteOutlined />}
                       onClick={() => handleDeletePlan(plan.id)}
                     >
@@ -228,8 +227,8 @@ const StudyPlanPage: React.FC = () => {
                           时间：{moment(plan.startDate).format('YYYY-MM-DD')} 至 {moment(plan.endDate).format('YYYY-MM-DD')}
                         </div>
                         <div style={{ marginBottom: 8 }}>
-                          <Progress 
-                            percent={progress} 
+                          <Progress
+                            percent={progress}
                             strokeColor={getStatusColor(plan)}
                             format={() => `${plan.completedWords}/${plan.targetWords}`}
                           />
@@ -277,7 +276,7 @@ const StudyPlanPage: React.FC = () => {
           >
             <Input placeholder="例如：高考英语词汇冲刺" />
           </Form.Item>
-          
+
           <Form.Item
             name="targetWords"
             label="目标单词数"
@@ -285,7 +284,7 @@ const StudyPlanPage: React.FC = () => {
           >
             <Input type="number" placeholder="例如：1000" />
           </Form.Item>
-          
+
           <Form.Item
             name="dailyGoal"
             label="每日目标"
@@ -293,7 +292,7 @@ const StudyPlanPage: React.FC = () => {
           >
             <Input type="number" placeholder="例如：20" />
           </Form.Item>
-          
+
           <Form.Item
             name="startDate"
             label="开始日期"
@@ -301,7 +300,7 @@ const StudyPlanPage: React.FC = () => {
           >
             <DatePicker style={{ width: '100%' }} />
           </Form.Item>
-          
+
           <Form.Item
             name="endDate"
             label="结束日期"
@@ -309,7 +308,7 @@ const StudyPlanPage: React.FC = () => {
           >
             <DatePicker style={{ width: '100%' }} />
           </Form.Item>
-          
+
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
               {editingPlan ? '更新计划' : '创建计划'}
